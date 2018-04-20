@@ -17,6 +17,9 @@ class Temperature_sensor
   public:
   Temperature_sensor(ros::NodeHandle nh, const char *i = "0", const char *port = "ttyUSB0") : index(i), serial_port(port)
   {
+    //
+    // Initialize sensor and object variables
+    //
     std::cout << "Initializing temperature sensor: " << serial_port << " witn index " << index << std::endl;
     temp_pub = nh.advertise<sensor_msgs::Temperature>(("temperature_sensor/"+index+"/temperature"), 10);
     pres_pub = nh.advertise<sensor_msgs::FluidPressure>(("temperature_sensor/"+index+"/pressure"), 10);
@@ -30,6 +33,10 @@ class Temperature_sensor
   }
   void getlatest()
   {
+    //
+    // Gets latest sensor data.
+    // It only updates member variables if the data is valid
+    //
     if (!sensor_initialized) {
        std::cout << "Sensor failed to initialize" << std::endl;
     }
@@ -58,6 +65,9 @@ class Temperature_sensor
   }
   void publish()
   { 
+    //
+    // Publish latest stored data
+    //
     if (!sensor_initialized) {
        std::cout << "Sensor failed to initialize" << std::endl;
     }
@@ -82,6 +92,8 @@ class Temperature_sensor
   std::string index;
   double temperature;
   double pressure;
+
+  // Private Utilities
   bool validity_checker(uint16_t bits)
   {
     uint16_t bits_reverse = (bits >> 8) | (bits << 8);
