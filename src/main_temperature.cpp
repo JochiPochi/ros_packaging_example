@@ -1,21 +1,22 @@
 #include "ros/ros.h"
-#include "sensor_msgs/Temperature.h"
+#include <cstdio>
+#include <iostream>
+#include "temperature_sensor.h"
 
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "temperature_sensor");
 
-  ros::NodeHandle n;
-
-  ros::Publisher temp_pub = n.advertise<sensor_msgs::Temperature>("temperature_sensor/data", 10);
+  ros::NodeHandle temp_node_handle;
 
   ros::Rate loop_rate(10);
 
+  Temperature_sensor sensor = Temperature_sensor(temp_node_handle, "serialportname");
+
   while (ros::ok())
   {
-    sensor_msgs::Temperature msg;
-
-    temp_pub.publish(msg);
+    sensor.getlatest();
+    sensor.publish();
 
     ros::spinOnce();
 
