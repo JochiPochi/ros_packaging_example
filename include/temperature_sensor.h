@@ -15,14 +15,18 @@
 class Temperature_sensor
 {
   public:
-  Temperature_sensor(ros::NodeHandle nh, const char *port = "ttyUSB0") : serial_port(port)
+  Temperature_sensor(ros::NodeHandle nh, const char *i = "0", const char *port = "ttyUSB0") : index(i), serial_port(port)
   {
-    std::cout << "Initializing temperature sensor" << std::endl;
-    temp_pub = nh.advertise<sensor_msgs::Temperature>("temperature_sensor/temperature", 10);
-    pres_pub = nh.advertise<sensor_msgs::FluidPressure>("temperature_sensor/pressure", 10);
+    std::cout << "Initializing temperature sensor: " << serial_port << " witn index " << index << std::endl;
+    temp_pub = nh.advertise<sensor_msgs::Temperature>(("temperature_sensor/"+index+"/temperature"), 10);
+    pres_pub = nh.advertise<sensor_msgs::FluidPressure>(("temperature_sensor/"+index+"/pressure"), 10);
     temperature = 0;
     pressure = 0; 
-    sensor_initialized = initialize(serial_port);
+    if (sensor_initialized = initialize(serial_port)){
+      std::cout << "Temperature sensor initialized successfully" << std::endl << std::endl;
+    } else {
+      std::cout << "ERROR: Sensor failed to initialize" << std::endl;
+    }
   }
   void getlatest()
   {
@@ -75,6 +79,7 @@ class Temperature_sensor
   ros::Publisher pres_pub;
   bool sensor_initialized;
   std::string serial_port;
+  std::string index;
   double temperature;
   double pressure;
   bool validity_checker(uint16_t bits)

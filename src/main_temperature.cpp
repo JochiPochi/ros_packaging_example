@@ -7,11 +7,16 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "temperature_sensor");
 
-  ros::NodeHandle temp_node_handle;
+  ros::NodeHandle nh;
 
   ros::Rate loop_rate(10);
 
-  Temperature_sensor sensor = Temperature_sensor(temp_node_handle, "serialportname");
+  std::string serial_port;
+  std::string sensor_number;
+  nh.getParam(ros::this_node::getName()+"/serial_port", serial_port);
+  nh.getParam(ros::this_node::getName()+"/sensor_num", sensor_number);
+
+  Temperature_sensor sensor = Temperature_sensor(nh, sensor_number.c_str(), serial_port.c_str());
 
   while (ros::ok())
   {
