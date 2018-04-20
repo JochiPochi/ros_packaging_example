@@ -3,4 +3,14 @@
                 <param name="serial_port" value="ttyUSB1"/>
                 <param name="sensor_num" value="a"/>
         </node>
+
+        <node pkg="ros_packaging_example" type="temperature_node" name="temperature_node_b" output="screen">
+                <param name="serial_port" value="ttyACM7"/>
+                <param name="sensor_num" value="b"/>
+        </node>
+
+        <node pkg="ros_packaging_example" type="temperature_node" name="temperature_node_c" output="screen">
+                <param name="serial_port" value="ttyOO4"/>
+                <param name="sensor_num" value="c"/>
+        </node>
 </launch>
